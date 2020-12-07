@@ -25,7 +25,7 @@ Install Django Admin Changelist Charts::
 
     pip install dj-admin-changelist-charts
 
-Add it to your `INSTALLED_APPS`:
+Add it to your `INSTALLED_APPS` **before `django.contrib.admin`**:
 
 .. code-block:: python
 
@@ -33,6 +33,9 @@ Add it to your `INSTALLED_APPS`:
         ...
         'dj_admin_changelist_charts.apps.DjAdminChangelistChartsConfig',
         ...
+        'django.contrib.admin',
+        ...
+
     )
 
 Add Django Admin Changelist Charts's URL patterns:

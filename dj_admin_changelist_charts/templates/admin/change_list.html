@@ -77,7 +77,7 @@ input[type="number"] {
         type: 'pie'
     },
     title: {
-        text: 'Shares by status (total: {{ cl.result_count }})'
+        text: 'Shares by {{ cl.chart_group_by }} (total: {{ cl.result_count }})'
     },
     tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
