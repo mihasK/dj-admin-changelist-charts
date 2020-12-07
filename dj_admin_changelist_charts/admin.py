@@ -36,9 +36,11 @@ class ChangeListMixin(ChangeList):
                 limit = self.model_admin.chart_number_of_groups_limit
                 if limit:
                     res = sorted(res, key=lambda x: x['y'], reverse=True)
-                    res = res[:limit]
 
-                    self.chart_warning = 'Amount of groups is too big: %s . Only top %s groups displayed in the chart.'
+                    self.chart_warning = 'Amount of groups is too big: %s . Only top %s groups displayed in the chart.' % (
+                        len(res), limit
+                    )
+                    res = res[:limit]
 
                 self.piechardata = json.dumps(res)
             except OperationalError:  # Skip in case timeout error
