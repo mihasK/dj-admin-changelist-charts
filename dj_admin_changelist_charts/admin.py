@@ -13,9 +13,14 @@ class ChangeListMixin(ChangeList):
     def get_results(self, request):
         super(ChangeListMixin, self).get_results(request)
 
+        def change_none_to_str(value):
+            if value is None:
+                return 'Value is not specified'
+            return value
+
         self.piechardata = json.dumps([
 
-            {'name': x[self.chart_group_by], 'y': x['count']}
+            {'name': change_none_to_str(x[self.chart_group_by]), 'y': x['count']}
             for x in self.queryset.all().order_by(self.chart_group_by).values(
                 self.chart_group_by
             ).annotate(count=Count('*'))
