@@ -80,7 +80,7 @@ input[type="number"] {
         text: 'Shares by {{ cl.chart_group_by }} (total: {{ cl.result_count }}).<br> {{cl.chart_warning }}'
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.01f}%</b>'
+        pointFormat: '{series.name}: <b>{point.percentage:.3f}%</b>'
     },
     accessibility: {
         point: {
@@ -93,7 +93,7 @@ input[type="number"] {
             cursor: 'pointer',
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.01f} %'
+                format: '<b>{point.name}</b>: {point.percentage:.3f} %'
             }
         }
     },
