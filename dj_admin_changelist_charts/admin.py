@@ -16,10 +16,9 @@ class ChangeListMixin(ChangeList):
         self.piechardata = json.dumps([
 
             {'name': x[self.chart_group_by], 'y': x['count']}
-            for x in
-            self.queryset.all().order_by(self.chart_group_by).values(
+            for x in self.queryset.all().order_by(self.chart_group_by).values(
                 self.chart_group_by
-            ).annotate(count=Count(self.chart_group_by))
+            ).annotate(count=Count('*'))
         ]
         )
 
