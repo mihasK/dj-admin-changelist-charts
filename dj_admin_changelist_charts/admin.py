@@ -27,13 +27,20 @@ class ChangeListMixin(ChangeList):
             try:
                 attr = self.model_admin.chart_group_by_attr
 
-                self.piechardata = json.dumps([
+                res = [
+                    {'name': _change_none_to_str(x[attr]), 'y': x['count']} for x in
+                          self.queryset.all().order_by(attr).values(attr).annotate(count=Count('*'))
+                ]
 
-                    {'name': _change_none_to_str(x[attr]), 'y': x['count']}
-                    for x in self.queryset.all().order_by(attr).values(
-                        attr
-                    ).annotate(count=Count('*'))
-                ])
+
+                limit = self.model_admin.chart_number_of_groups_limit
+                if limit:
+                    res = sorted(res, key=lambda x: x['count'], reverse=True)
+                    res = res[:limit]
+
+                    self.chart_warning = 'Amount of groups is too big: %s . Only top %s groups displayed in the chart.'
+
+                self.piechardata = json.dumps(res)
             except OperationalError:  # Skip in case timeout error
                 pass
 
@@ -43,6 +50,7 @@ class AdminWIthChartsMixin(admin.ModelAdmin):
         return super().get_changelist_instance(request)
 
     chart_group_by_attr = None
+    chart_number_of_groups_limit = None
     chart_sql_execution_time_limit_msec = 0 # Enable it for postgres. Sqlite doesn't support `SET LOCAL statement_timeout TO`
     chart_null_value_text = 'Value is not specified'
     chart_empty_value_text = 'Value is empty string'
