@@ -34,7 +34,7 @@ class ChangeListMixin(ChangeList):
 
 
                 limit = self.model_admin.chart_number_of_groups_limit
-                if limit:
+                if limit and len(res) > limit:
                     res = sorted(res, key=lambda x: x['y'], reverse=True)
 
                     self.chart_warning = 'Amount of groups is too big: %s . Only top %s groups displayed in the chart.' % (
