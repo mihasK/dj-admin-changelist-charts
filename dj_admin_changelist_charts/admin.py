@@ -2,7 +2,7 @@
 import json
 
 from django.contrib.admin.views.main import ChangeList
-from django.db import transaction, connection
+from django.db import transaction, connection, OperationalError
 from django.db.models import Count
 from django.contrib import admin
 
@@ -24,15 +24,18 @@ class ChangeListMixin(ChangeList):
             if self.model_admin.chart_sql_execution_time_limit_msec:
                 cursor.execute('SET LOCAL statement_timeout TO %s;' % self.model_admin.chart_sql_execution_time_limit_msec)
 
-            attr = self.model_admin.chart_group_by_attr
+            try:
+                attr = self.model_admin.chart_group_by_attr
 
-            self.piechardata = json.dumps([
+                self.piechardata = json.dumps([
 
-                {'name': _change_none_to_str(x[attr]), 'y': x['count']}
-                for x in self.queryset.all().order_by(attr).values(
-                    attr
-                ).annotate(count=Count('*'))
-            ])
+                    {'name': _change_none_to_str(x[attr]), 'y': x['count']}
+                    for x in self.queryset.all().order_by(attr).values(
+                        attr
+                    ).annotate(count=Count('*'))
+                ])
+            except OperationalError:  # Skip in case timeout error
+                pass
 
 
 class AdminWIthChartsMixin(admin.ModelAdmin):
