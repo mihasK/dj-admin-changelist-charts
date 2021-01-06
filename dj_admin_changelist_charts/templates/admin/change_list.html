@@ -69,7 +69,10 @@ input[type="number"] {
 
 
             <script>
-    Highcharts.chart('chartcontainer', {
+
+              if ({{ cl.piechardata | safe | default:"false" }}) {
+    Highcharts.chart('chartcontainer',
+      {
     chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -100,9 +103,10 @@ input[type="number"] {
     series: [{
         name: 'Share',
         colorByPoint: true,
-        data: {{ cl.piechardata | safe }}
+        data: {{ cl.piechardata | safe | default:"null" }}
     }]
 });
+              }
     </script>
 
 {% endblock %}
