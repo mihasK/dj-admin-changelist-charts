@@ -16,7 +16,7 @@ class ChangeListMixin(ChangeList):
         def _change_none_to_str(value):
             if value is None:
                 return self.model_admin.chart_null_value_text
-            if value is '':
+            if value == '':
                 return self.model_admin.chart_empty_value_text
             return value
 
